@@ -2071,7 +2071,7 @@ where
     RE: Error + 'static,
     TE: ErrorResponse,
 {
-    if http_response.status_code != StatusCode::OK {
+    if !http_response.status_code.is_success() {
         let reason = http_response.body.as_slice();
         if reason.is_empty() {
             return Err(RequestTokenError::Other(
@@ -3184,7 +3184,7 @@ where
     /// Failed to parse server response. Parse errors may occur while parsing either successful
     /// or error responses.
     ///
-    #[error("Failed to parse server response")]
+    #[error("Failed to parse server response: {0}")]
     Parse(
         #[source] serde_path_to_error::Error<serde_json::error::Error>,
         Vec<u8>,
